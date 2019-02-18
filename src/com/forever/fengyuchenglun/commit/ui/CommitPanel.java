@@ -4,10 +4,13 @@ import com.forever.fengyuchenglun.commit.CommitMessage;
 import com.forever.fengyuchenglun.commit.CommitSetting;
 import com.forever.fengyuchenglun.commit.model.ChangeScope;
 import com.forever.fengyuchenglun.commit.model.ChangeType;
+import com.forever.fengyuchenglun.commit.model.CommitChange;
 import com.intellij.openapi.project.Project;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,12 +28,50 @@ public class CommitPanel {
     private JTextField closedIssues;
     private JTextArea breakingChanges;
 
-    public CommitPanel(Project project) {
+    public CommitPanel(Project project, CommitChange commitChange) {
         for (ChangeType type : commitSetting.getChangeTypeList()) {
             changeType.addItem(type);
         }
         for (ChangeScope scope : commitSetting.getChangeScopeList()) {
             changeScope.addItem(scope);
+        }
+        if (null != commitChange) {
+            // 下拉框选项不为空
+            if (!CollectionUtils.isEmpty(commitSetting.getChangeTypeList())) {
+                // 选中值
+                if (commitChange.getChangeType() != null) {
+                    changeType.setSelectedItem(commitChange.getChangeType());
+                } else {
+                    // 默认选择第一个
+                    changeType.setSelectedIndex(0);
+                }
+            }
+
+            if (!CollectionUtils.isEmpty(commitSetting.getChangeScopeList())) {
+                // 选中值
+                if (commitChange.getChangeScope() != null) {
+                    changeScope.setSelectedItem(commitChange.getChangeScope());
+                } else {
+                    // 默认选择第一个
+                    changeScope.setSelectedIndex(0);
+                }
+            }
+
+            if(StringUtils.isNotBlank(commitChange.getShortDescription())){
+                shortDescription.setText(commitChange.getShortDescription());
+            }
+
+            if(StringUtils.isNotBlank(commitChange.getLongDescription())){
+                longDescription.setText(commitChange.getLongDescription());
+            }
+
+            if(StringUtils.isNotBlank(commitChange.getBreakingChanges())){
+                breakingChanges.setText(commitChange.getBreakingChanges());
+            }
+
+            if(StringUtils.isNotBlank(commitChange.getClosedIssues())){
+                closedIssues.setText(commitChange.getClosedIssues());
+            }
         }
     }
 
@@ -39,7 +80,7 @@ public class CommitPanel {
     }
 
     String getCommitMessage() {
-        return  CommitMessage.buildContent(
+        return CommitMessage.buildContent(
                 (ChangeType) changeType.getSelectedItem(),
                 (ChangeScope) changeScope.getSelectedItem(),
                 shortDescription.getText().trim(),

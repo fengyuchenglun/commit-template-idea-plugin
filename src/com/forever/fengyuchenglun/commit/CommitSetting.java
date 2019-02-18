@@ -7,10 +7,14 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -57,16 +61,16 @@ public class CommitSetting implements  PersistentStateComponent<Element> {
         Element changeTypeListElement = new Element("changeTypes");
         changeTypeList.stream().forEach(x -> {
             Element changeTypeElement = new Element("changeType");
-            changeTypeElement.setAttribute("type", x.getType());
-            changeTypeElement.setAttribute("description", x.getDescription());
+            changeTypeElement.addContent(new Element("type").addContent(x.getType()));
+            changeTypeElement.addContent(new Element("description").addContent(x.getDescription()));
             changeTypeListElement.addContent(changeTypeElement);
         });
         Element changeScopeListElement = new Element("changeScopes");
         changeScopeList.stream().forEach(x -> {
-            Element changeScopElement = new Element("changeScope");
-            changeScopElement.setAttribute("scope", x.getScope());
-            changeScopElement.setAttribute("description", x.getDescription());
-            changeTypeListElement.addContent(changeScopElement);
+            Element changeScopeElement = new Element("changeScope");
+            changeScopeElement.addContent(new Element("scope").addContent( x.getScope()));
+            changeScopeElement.addContent(new Element("description").addContent(x.getDescription()));
+            changeScopeListElement.addContent(changeScopeElement);
         });
         element.addContent(changeTypeListElement);
         element.addContent(changeScopeListElement);
@@ -121,4 +125,27 @@ public class CommitSetting implements  PersistentStateComponent<Element> {
         this.changeScopeList = changeScopeList;
     }
 
+    @Override
+    public void noStateLoaded() {
+        // 创建sax解析器
+        SAXBuilder saxBuilder = new SAXBuilder();
+
+        // 获取Document
+        try {
+            Document document = saxBuilder.build(this.getClass().getClassLoader().getResourceAsStream("commit-setting.xml"));
+            Element element = document.getRootElement();
+            Element changeTypes=element.getChild("changeTypes");
+            changeTypes.getChildren("changeType").stream().forEach(x->{
+                this.changeTypeList.add(new ChangeType(x.getChild("type").getText(),x.getChild("description").getText()));
+            });
+            Element changeScopes=element.getChild("changeScopes");
+            changeScopes.getChildren("changeScope").stream().forEach(x->{
+                this.changeScopeList.add(new ChangeScope(x.getChild("scope").getText(),x.getChild("description").getText()));
+            });
+        } catch (JDOMException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

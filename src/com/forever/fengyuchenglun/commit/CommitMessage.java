@@ -3,18 +3,16 @@ package com.forever.fengyuchenglun.commit;
 import com.forever.fengyuchenglun.commit.model.ChangeScope;
 import com.forever.fengyuchenglun.commit.model.ChangeType;
 import com.forever.fengyuchenglun.commit.model.CommitChange;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.compress.utils.Lists;
+import com.google.common.collect.Lists;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
@@ -24,7 +22,7 @@ import static org.apache.commons.lang.StringUtils.isNotBlank;
 public class CommitMessage {
     //  https://stackoverflow.com/a/2120040/5138 796
     private static final int MAX_LINE_LENGTH = 100;
-    private static Pattern HEADER_PATTERN = Pattern.compile("^([a-z]+)(\\((.*)\\))?: (.*)\n(.*)*",Pattern.DOTALL | Pattern.MULTILINE);
+    private static Pattern HEADER_PATTERN = Pattern.compile("^([a-z]+)(\\((.*)\\))?: ([^\n]+)+?(.*)?\n",Pattern.DOTALL | Pattern.MULTILINE);
 //    private static Pattern BREAKING_CHANGE_PATTERN = Pattern.compile("((?!Closes).)*",Pattern.DOTALL | Pattern.MULTILINE);
 
     public static String buildContent(ChangeType changeType, ChangeScope changeScope, String shortDescription, String longDescription, String closedIssues, String breakingChanges) {
@@ -64,11 +62,10 @@ public class CommitMessage {
     }
 
     public static CommitChange buildCommitChange(String commitMessage, CommitSetting commitSetting) {
-        CommitChange commitChange;
+        CommitChange commitChange=new CommitChange();
         if (StringUtils.isBlank(commitMessage)) {
-            return null;
+            return commitChange;
         }
-        commitChange = new CommitChange();
         List<ChangeType> changeTypes = commitSetting.getChangeTypeList();
         List<ChangeScope> changeScopes = commitSetting.getChangeScopeList();
 

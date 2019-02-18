@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.EditableModel;
 import com.intellij.util.ui.UIUtil;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;

@@ -1,8 +1,9 @@
 package com.forever.fengyuchenglun.commit.ui;
 
-import com.forever.fengyuchenglun.commit.CommitMessage;
+import com.forever.fengyuchenglun.commit.model.CommitChange;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -14,9 +15,9 @@ public class CommitDialog extends DialogWrapper {
 
     private final CommitPanel panel;
 
-   public CommitDialog(@Nullable Project project) {
+   public CommitDialog(@Nullable Project project,@NotNull CommitChange commitChange) {
         super(project);
-        panel = new CommitPanel(project);
+        panel = new CommitPanel(project,commitChange);
         setTitle("Commit");
         setOKButtonText("OK");
         init();

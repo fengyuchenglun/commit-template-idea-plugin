@@ -3,14 +3,12 @@ package com.forever.fengyuchenglun.commit;
 import com.forever.fengyuchenglun.commit.model.ChangeScope;
 import com.forever.fengyuchenglun.commit.model.ChangeType;
 import com.forever.fengyuchenglun.commit.model.CommitChange;
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.compress.utils.Lists;
+import com.google.common.collect.Lists;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * @author duanledexianxianxian
@@ -42,7 +40,6 @@ public class Demo {
 
 
         System.out.println(changeTypeList.toArray());
-        System.out.println(MapUtils.fixedSizeMap(changeTypeList.stream().collect(Collectors.toMap(ChangeType::getType, x -> x.getDescription()))));
 
 
         String content = "feat(user): 123 456\n" +
@@ -106,13 +103,13 @@ public class Demo {
         }else{
 
         }
-        System.out.println("commitChange:" + commitChange);
+        System.out.println("commitChange1:" + commitChange);
 
         CommitSetting commitSetting=new CommitSetting();
         commitSetting.setChangeTypeList(changeTypeList);
         commitSetting.setChangeScopeList(changeScopes);
 
-        System.out.println("commitChange:" + CommitMessage.buildCommitChange(content,commitSetting));
+        System.out.println("commitChange2:" + CommitMessage.buildCommitChange(content,commitSetting));
 
 
          content = "feat: 123 456\n" +
@@ -129,18 +126,18 @@ public class Demo {
                 "\n" +
                 "Closes 555\n" +
                 "Closes 6666";
-        System.out.println("commitChange:" + CommitMessage.buildCommitChange(content,commitSetting));
+        System.out.println("commitChange3:" + CommitMessage.buildCommitChange(content,commitSetting));
 
 
         content = "feat: 123 456\n";
-        System.out.println("commitChange:" + CommitMessage.buildCommitChange(content,commitSetting));
+        System.out.println("commitChange4:" + CommitMessage.buildCommitChange(content,commitSetting));
 
         content = "feat: 123 456\n" +
                 "\n" +
                 "BREAKING CHANGE: 4444\n" +
                 "\n" +
                 "Closes 6666";
-        System.out.println("commitChange:" + CommitMessage.buildCommitChange(content,commitSetting));
+        System.out.println("commitChange5:" + CommitMessage.buildCommitChange(content,commitSetting));
     }
 
 
