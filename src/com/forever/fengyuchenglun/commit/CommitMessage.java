@@ -22,7 +22,7 @@ import static org.apache.commons.lang.StringUtils.isNotBlank;
  * @author Damien Arrachequesne <damien.arrachequesne@gmail.com>
  */
 public class CommitMessage {
-    //  https://stackoverflow.com/a/2120040/5138796
+    //  https://stackoverflow.com/a/2120040/5138 796
     private static final int MAX_LINE_LENGTH = 100;
     private static Pattern HEADER_PATTERN = Pattern.compile("^([a-z]+)(\\((.*)\\))?: (.*)\n(.*)*",Pattern.DOTALL | Pattern.MULTILINE);
 //    private static Pattern BREAKING_CHANGE_PATTERN = Pattern.compile("((?!Closes).)*",Pattern.DOTALL | Pattern.MULTILINE);
