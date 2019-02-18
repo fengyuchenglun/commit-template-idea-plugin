@@ -1,9 +1,11 @@
 <idea-plugin>
-    <id>commit-template-idea-plugin</id>
+    <id>commit-template-idea-plus-plugin</id>
     <name>Git Commit Template</name>
-    <version>1.1.0</version>
+    <!-- 插件版本 -->
+    <version>1.0.0</version>
 
-    <vendor email="damien.arrachequesne@gmail.com" />
+    <!-- 供应商主页和email-->
+    <vendor email="fengyuchenglun@foxmail.com" />
 
     <description><![CDATA[
         <p>Create a commit message with the following template:</p>
@@ -23,15 +25,20 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
+        <applicationConfigurable instance="com.forever.fengyuchenglun.commit.CommitSearchableConfigurable"/>
+        <applicationService serviceInterface="com.forever.fengyuchenglun.commit.CommitSetting"
+                            serviceImplementation="com.forever.fengyuchenglun.commit.CommitSetting"/>
     </extensions>
 
     <actions>
-        <action id="Commit.Button" class="com.leroymerlin.commit.CreateCommitAction"
+        <action id="Commit.Button" class="com.forever.fengyuchenglun.commit.CreateCommitAction"
                 text="Create commit message"
                 description="Create commit message"
                 icon="PluginIcons.LOAD">
             <add-to-group group-id="Vcs.MessageActionGroup" anchor="first"/>
         </action>
     </actions>
+   <application-components>
+   </application-components>
 
 </idea-plugin>

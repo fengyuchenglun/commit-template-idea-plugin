@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.leroymerlin.commit.CommitPanel">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.forever.fengyuchenglun.commit.ui.CommitPanel">
   <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="7" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
@@ -15,7 +15,9 @@
       </vspacer>
       <component id="8bb2e" class="javax.swing.JLabel">
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="94" height="17"/>
+          </grid>
         </constraints>
         <properties>
           <text value="Type of change"/>
@@ -23,7 +25,9 @@
       </component>
       <component id="b0ac4" class="javax.swing.JLabel">
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="94" height="17"/>
+          </grid>
         </constraints>
         <properties>
           <text value="Scope of this change"/>
@@ -41,7 +45,9 @@
       </component>
       <component id="19a59" class="javax.swing.JLabel">
         <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="94" height="17"/>
+          </grid>
         </constraints>
         <properties>
           <horizontalTextPosition value="2"/>
@@ -58,7 +64,9 @@
       </component>
       <component id="a5d3c" class="javax.swing.JLabel">
         <constraints>
-          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="94" height="17"/>
+          </grid>
         </constraints>
         <properties>
           <text value="Long description"/>
@@ -72,11 +80,14 @@
         </constraints>
         <properties>
           <lineWrap value="true"/>
+          <toolTipText value="Max Size is 72"/>
         </properties>
       </component>
       <component id="83b17" class="javax.swing.JLabel">
         <constraints>
-          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="94" height="17"/>
+          </grid>
         </constraints>
         <properties>
           <text value="Closed issues"/>
@@ -100,7 +111,9 @@
       </component>
       <component id="c313a" class="javax.swing.JLabel">
         <constraints>
-          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="94" height="17"/>
+          </grid>
         </constraints>
         <properties>
           <text value="Breaking changes"/>
@@ -114,6 +127,8 @@
         </constraints>
         <properties>
           <lineWrap value="true"/>
+          <text value=""/>
+          <toolTipText value="Max Size is 72"/>
         </properties>
       </component>
     </children>

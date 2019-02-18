@@ -1,0 +1,56 @@
+<application>
+    <component name="CommitSetting">
+        <changeTypes>
+            <changeType>
+                <type>feat</type>
+                <description>A new feature</description>
+            </changeType>
+            <changeType>
+                <type>fix</type>
+                <description>A bug fix</description>
+            </changeType>
+            <changeType>
+                <type>docs</type>
+                <description>Documentation only changes</description>
+            </changeType>
+            <changeType>
+                <type>style</type>
+                <description>Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)</description>
+            </changeType>
+            <changeType>
+                <type>refactor</type>
+                <description>A code change that neither fixes a bug nor adds a feature</description>
+            </changeType>
+            <changeType>
+                <type>perf</type>
+                <description>A code change that improves performance</description>
+            </changeType>
+            <changeType>
+                <type>test</type>
+                <description>Adding missing tests or correcting existing tests</description>
+            </changeType>
+            <changeType>
+                <type>build</type>
+                <description>Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)</description>
+            </changeType>
+            <changeType>
+                <type>ci</type>
+                <description>Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)</description>
+            </changeType>
+            <changeType>
+                <type>chore</type>
+                <description>Other changes that don't modify src or test files</description>
+            </changeType>
+            <changeType>
+                <type>revert</type>
+                <description>Reverts a previous commit</description>
+            </changeType>
+        </changeTypes>
+        <changeScopes>
+            <changeScope>
+                <scope>course</scope>
+                <description>课程管理</description>
+            </changeScope>
+        </changeScopes>
+    </component>
+</application>

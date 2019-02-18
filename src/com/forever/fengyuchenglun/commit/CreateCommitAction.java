@@ -1,5 +1,6 @@
-package com.leroymerlin.commit;
+package com.forever.fengyuchenglun.commit;
 
+import com.forever.fengyuchenglun.commit.ui.CommitDialog;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.DumbAware;
@@ -10,23 +11,31 @@ import com.intellij.openapi.vcs.ui.Refreshable;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * @author Damien Arrachequesne
+ * 创建commit action
  */
 public class CreateCommitAction extends AnAction implements DumbAware {
 
     @Override
     public void actionPerformed(AnActionEvent actionEvent) {
+        // 获得commitPanel对象
         final CommitMessageI commitPanel = getCommitPanel(actionEvent);
-        if (commitPanel == null)
+        if (commitPanel == null){
             return;
+        }
 
         CommitDialog dialog = new CommitDialog(actionEvent.getProject());
         dialog.show();
         if (dialog.getExitCode() == DialogWrapper.OK_EXIT_CODE) {
-            commitPanel.setCommitMessage(dialog.getCommitMessage().toString());
+            commitPanel.setCommitMessage(dialog.getCommitMessage());
         }
     }
 
+    /**
+     * Gets commit panel.
+     *
+     * @param e the e
+     * @return the commit panel
+     */
     @Nullable
     private static CommitMessageI getCommitPanel(@Nullable AnActionEvent e) {
         if (e == null) {

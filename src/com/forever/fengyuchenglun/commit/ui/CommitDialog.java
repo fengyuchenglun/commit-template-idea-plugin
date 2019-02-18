@@ -1,5 +1,6 @@
-package com.leroymerlin.commit;
+package com.forever.fengyuchenglun.commit.ui;
 
+import com.forever.fengyuchenglun.commit.CommitMessage;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +14,7 @@ public class CommitDialog extends DialogWrapper {
 
     private final CommitPanel panel;
 
-    CommitDialog(@Nullable Project project) {
+   public CommitDialog(@Nullable Project project) {
         super(project);
         panel = new CommitPanel(project);
         setTitle("Commit");
@@ -27,7 +28,7 @@ public class CommitDialog extends DialogWrapper {
         return panel.getMainPanel();
     }
 
-    CommitMessage getCommitMessage() {
+   public String getCommitMessage() {
         return panel.getCommitMessage();
     }
 
