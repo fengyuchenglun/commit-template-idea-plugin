@@ -1,5 +1,6 @@
-package com.forever.fengyuchenglun.commit;
+package com.forever.fengyuchenglun.commit.util;
 
+import com.forever.fengyuchenglun.commit.CommitSetting;
 import com.forever.fengyuchenglun.commit.model.ChangeScope;
 import com.forever.fengyuchenglun.commit.model.ChangeType;
 import com.forever.fengyuchenglun.commit.model.CommitChange;
@@ -14,21 +15,21 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.forever.fengyuchenglun.commit.Constant.DEFAULT_CHANGE_SCOPE_VALUE;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 /**
  * @author Damien Arrachequesne <damien.arrachequesne@gmail.com>
  */
-public class CommitMessage {
+public class CommitMessageUtils {
     //  https://stackoverflow.com/a/2120040/5138 796
     private static final int MAX_LINE_LENGTH = 100;
-    private static Pattern HEADER_PATTERN = Pattern.compile("^([a-z]+)(\\((.*)\\))?: ([^\n]+)+?(.*)?\n",Pattern.DOTALL | Pattern.MULTILINE);
-//    private static Pattern BREAKING_CHANGE_PATTERN = Pattern.compile("((?!Closes).)*",Pattern.DOTALL | Pattern.MULTILINE);
+    private static Pattern HEADER_PATTERN = Pattern.compile("^([a-z]+)(\\((.*)\\))?: ([^\n]+)+?(.*)?\n", Pattern.DOTALL | Pattern.MULTILINE);
 
     public static String buildContent(ChangeType changeType, ChangeScope changeScope, String shortDescription, String longDescription, String closedIssues, String breakingChanges) {
         StringBuilder builder = new StringBuilder();
         builder.append(changeType.getType());
-        if (null != changeScope) {
+        if (null != changeScope && StringUtils.equalsIgnoreCase(changeScope.getScope(), DEFAULT_CHANGE_SCOPE_VALUE)) {
             builder
                     .append('(')
                     .append(changeScope.getScope())
@@ -62,7 +63,7 @@ public class CommitMessage {
     }
 
     public static CommitChange buildCommitChange(String commitMessage, CommitSetting commitSetting) {
-        CommitChange commitChange=new CommitChange();
+        CommitChange commitChange = new CommitChange();
         if (StringUtils.isBlank(commitMessage)) {
             return commitChange;
         }
@@ -109,29 +110,29 @@ public class CommitMessage {
                 }
             }
 
-            if (StringUtils.isNotBlank(shortDescription)){
+            if (StringUtils.isNotBlank(shortDescription)) {
                 commitChange.setShortDescription(shortDescription.trim());
             }
 
-            if (StringUtils.isNotBlank(longDescription)){
+            if (StringUtils.isNotBlank(longDescription)) {
                 commitChange.setLongDescription(longDescription.trim());
             }
         }
 
         // 解析breaking change+close部分
-        if (sections.length>1){
+        if (sections.length > 1) {
             // 至少包含一个closes
-            if(sections[1].contains("Closes")){
-                String[] section1=sections[1].split("Closes");
+            if (sections[1].contains("Closes")) {
+                String[] section1 = sections[1].split("Closes");
                 System.out.println(Arrays.toString(section1));
-                if(StringUtils.isNotBlank(section1[0])){
+                if (StringUtils.isNotBlank(section1[0])) {
                     commitChange.setBreakingChanges(section1[0].trim());
                 }
-                List<String> closes= Lists.newArrayList();
-                for (int i=1;i<section1.length;i++){
+                List<String> closes = Lists.newArrayList();
+                for (int i = 1; i < section1.length; i++) {
                     closes.add(section1[i].trim());
                 }
-                commitChange.setClosedIssues(StringUtils.join(closes.toArray(),","));
+                commitChange.setClosedIssues(StringUtils.join(closes.toArray(), ","));
             }
 //           // 用Closes再次切分
 //            String[] section1=sections[1].split("Closes");

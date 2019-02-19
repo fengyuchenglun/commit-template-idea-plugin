@@ -30,15 +30,16 @@ import java.util.List;
                 file = "$APP_CONFIG$/commit-setting.xml"
         )}
 )
-public class CommitSetting implements  PersistentStateComponent<Element> {
+public class CommitSetting implements PersistentStateComponent<Element> {
     /**
      * header type list
+     * todo 使用linkedHashMap更佳
      */
-    private List<ChangeType> changeTypeList= Lists.newArrayList();
+    private List<ChangeType> changeTypeList = Lists.newArrayList();
     /**
      * header scope list
      */
-    private List<ChangeScope> changeScopeList= Lists.newArrayList();
+    private List<ChangeScope> changeScopeList = Lists.newArrayList();
 
 
     /**
@@ -47,11 +48,12 @@ public class CommitSetting implements  PersistentStateComponent<Element> {
      * @return the instance
      */
     public static CommitSetting getInstance() {
-        return  ServiceManager.getService(CommitSetting.class);
+        return ServiceManager.getService(CommitSetting.class);
     }
 
     /**
      * 保存的时候触发
+     *
      * @return
      */
     @Nullable
@@ -68,7 +70,7 @@ public class CommitSetting implements  PersistentStateComponent<Element> {
         Element changeScopeListElement = new Element("changeScopes");
         changeScopeList.stream().forEach(x -> {
             Element changeScopeElement = new Element("changeScope");
-            changeScopeElement.addContent(new Element("scope").addContent( x.getScope()));
+            changeScopeElement.addContent(new Element("scope").addContent(x.getScope()));
             changeScopeElement.addContent(new Element("description").addContent(x.getDescription()));
             changeScopeListElement.addContent(changeScopeElement);
         });
@@ -79,13 +81,13 @@ public class CommitSetting implements  PersistentStateComponent<Element> {
 
     @Override
     public void loadState(@NotNull Element element) {
-        Element changeTypes=element.getChild("changeTypes");
-        changeTypes.getChildren("changeType").stream().forEach(x->{
-            this.changeTypeList.add(new ChangeType(x.getChild("type").getText(),x.getChild("description").getText()));
+        Element changeTypes = element.getChild("changeTypes");
+        changeTypes.getChildren("changeType").stream().forEach(x -> {
+            this.changeTypeList.add(new ChangeType(x.getChild("type").getText(), x.getChild("description").getText()));
         });
-        Element changeScopes=element.getChild("changeScopes");
-        changeScopes.getChildren("changeScope").stream().forEach(x->{
-            this.changeScopeList.add(new ChangeScope(x.getChild("scope").getText(),x.getChild("description").getText()));
+        Element changeScopes = element.getChild("changeScopes");
+        changeScopes.getChildren("changeScope").stream().forEach(x -> {
+            this.changeScopeList.add(new ChangeScope(x.getChild("scope").getText(), x.getChild("description").getText()));
         });
     }
 
@@ -127,6 +129,8 @@ public class CommitSetting implements  PersistentStateComponent<Element> {
 
     @Override
     public void noStateLoaded() {
+        this.changeTypeList.clear();
+        this.changeScopeList.clear();
         // 创建sax解析器
         SAXBuilder saxBuilder = new SAXBuilder();
 
@@ -134,13 +138,13 @@ public class CommitSetting implements  PersistentStateComponent<Element> {
         try {
             Document document = saxBuilder.build(this.getClass().getClassLoader().getResourceAsStream("commit-setting.xml"));
             Element element = document.getRootElement();
-            Element changeTypes=element.getChild("changeTypes");
-            changeTypes.getChildren("changeType").stream().forEach(x->{
-                this.changeTypeList.add(new ChangeType(x.getChild("type").getText(),x.getChild("description").getText()));
+            Element changeTypes = element.getChild("changeTypes");
+            changeTypes.getChildren("changeType").stream().forEach(x -> {
+                this.changeTypeList.add(new ChangeType(x.getChild("type").getText(), x.getChild("description").getText()));
             });
-            Element changeScopes=element.getChild("changeScopes");
-            changeScopes.getChildren("changeScope").stream().forEach(x->{
-                this.changeScopeList.add(new ChangeScope(x.getChild("scope").getText(),x.getChild("description").getText()));
+            Element changeScopes = element.getChild("changeScopes");
+            changeScopes.getChildren("changeScope").stream().forEach(x -> {
+                this.changeScopeList.add(new ChangeScope(x.getChild("scope").getText(), x.getChild("description").getText()));
             });
         } catch (JDOMException e) {
             e.printStackTrace();

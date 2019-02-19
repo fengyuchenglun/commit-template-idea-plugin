@@ -1,6 +1,7 @@
 package com.forever.fengyuchenglun.commit;
 
 import com.forever.fengyuchenglun.commit.ui.CommitDialog;
+import com.forever.fengyuchenglun.commit.util.CommitMessageUtils;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.DumbAware;
@@ -24,7 +25,7 @@ public class CreateCommitAction extends AnAction implements DumbAware {
             return;
         }
 
-        CommitDialog dialog = new CommitDialog(actionEvent.getProject(),CommitMessage.buildCommitChange(commitPanel.getCommitMessage(),CommitSetting.getInstance()));
+        CommitDialog dialog = new CommitDialog(actionEvent.getProject(), CommitMessageUtils.buildCommitChange(commitPanel.getCommitMessage(),CommitSetting.getInstance()));
         dialog.show();
         if (dialog.getExitCode() == DialogWrapper.OK_EXIT_CODE) {
             commitPanel.setCommitMessage(dialog.getCommitMessage());

@@ -1,6 +1,7 @@
 package com.forever.fengyuchenglun.commit.ui;
 
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -58,7 +59,7 @@ public class CommitConfigDialog extends DialogWrapper {
      * Instantiates a new Template config dialog.
      */
     public CommitConfigDialog(List<String> columnNames) {
-        this(null,columnNames);
+        this(null, columnNames);
     }
 
     /**
@@ -66,7 +67,7 @@ public class CommitConfigDialog extends DialogWrapper {
      *
      * @param mode the mode
      */
-    public CommitConfigDialog(Entry<String, String> mode,List<String> columnNames) {
+    public CommitConfigDialog(Entry<String, String> mode, List<String> columnNames) {
         super(true);
         this.setColumnNames(columnNames);
         if (mode != null) {
@@ -75,6 +76,15 @@ public class CommitConfigDialog extends DialogWrapper {
             this.model = modelCopy.entrySet().iterator().next();
         }
         init();
+    }
+
+    @Nullable
+    @Override
+    protected ValidationInfo doValidate() {
+        if (nameField.getText().trim().length() == 0) {
+            return new ValidationInfo(String.format("%s  is require", columnNames.get(0)));
+        }
+        return super.doValidate();
     }
 
     /**
@@ -96,7 +106,7 @@ public class CommitConfigDialog extends DialogWrapper {
 
         nameField = new JTextField();
         nameField.setHorizontalAlignment(SwingConstants.LEFT);
-        nameField.setPreferredSize(new Dimension(500,10));
+        nameField.setPreferredSize(new Dimension(500, 10));
         if (model != null) {
             nameField.setText(model.getKey());
         }

@@ -46,8 +46,15 @@ public class CommitTable extends JBTable {
         // 获取表格所有的列
         Enumeration<TableColumn> columns = getColumnModel().getColumns();
         // 循环自定义设置单元格样式
+        int i = 0;
         while (columns.hasMoreElements()) {
-            columns.nextElement().setCellRenderer(new FieldRenderer());
+            TableColumn tableColumn = columns.nextElement();
+            if (i == 0) {
+                tableColumn.setPreferredWidth(120);
+                tableColumn.setWidth(120);
+                i++;
+            }
+            tableColumn.setCellRenderer(new FieldRenderer());
         }
     }
 
@@ -86,7 +93,7 @@ public class CommitTable extends JBTable {
             }
         }
         // 打开对话框
-        CommitConfigDialog dialog = new CommitConfigDialog(settings.get(row),columnNames);
+        CommitConfigDialog dialog = new CommitConfigDialog(settings.get(row), columnNames);
         dialog.show();
         if (dialog.isOK()) {
             settings.set(row, dialog.getModel());

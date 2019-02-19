@@ -1,6 +1,6 @@
 package com.forever.fengyuchenglun.commit.ui;
 
-import com.forever.fengyuchenglun.commit.CommitMessage;
+import com.forever.fengyuchenglun.commit.util.CommitMessageUtils;
 import com.forever.fengyuchenglun.commit.CommitSetting;
 import com.forever.fengyuchenglun.commit.model.ChangeScope;
 import com.forever.fengyuchenglun.commit.model.ChangeType;
@@ -15,7 +15,11 @@ import org.apache.commons.lang.StringUtils;
 import javax.swing.*;
 import java.awt.*;
 
+import static com.forever.fengyuchenglun.commit.Constant.DEFAULT_CHANGE_SCOPE_VALUE;
+
 /**
+ * 提交页面
+ *
  * @author Damien Arrachequesne
  */
 public class CommitPanel {
@@ -27,14 +31,29 @@ public class CommitPanel {
     private JTextArea longDescription;
     private JTextField closedIssues;
     private JTextArea breakingChanges;
+    private JScrollPane jscrollPane;
+
+    public JTextField getShortDescription() {
+        return shortDescription;
+    }
+
+    public JTextArea getLongDescription() {
+        return longDescription;
+    }
+
+    public JTextArea getBreakingChanges() {
+        return breakingChanges;
+    }
 
     public CommitPanel(Project project, CommitChange commitChange) {
+        changeScope.addItem(new ChangeScope(DEFAULT_CHANGE_SCOPE_VALUE, DEFAULT_CHANGE_SCOPE_VALUE));
         for (ChangeType type : commitSetting.getChangeTypeList()) {
             changeType.addItem(type);
         }
         for (ChangeScope scope : commitSetting.getChangeScopeList()) {
             changeScope.addItem(scope);
         }
+        //  设置初始值
         if (null != commitChange) {
             // 下拉框选项不为空
             if (!CollectionUtils.isEmpty(commitSetting.getChangeTypeList())) {
@@ -57,19 +76,19 @@ public class CommitPanel {
                 }
             }
 
-            if(StringUtils.isNotBlank(commitChange.getShortDescription())){
+            if (StringUtils.isNotBlank(commitChange.getShortDescription())) {
                 shortDescription.setText(commitChange.getShortDescription());
             }
 
-            if(StringUtils.isNotBlank(commitChange.getLongDescription())){
+            if (StringUtils.isNotBlank(commitChange.getLongDescription())) {
                 longDescription.setText(commitChange.getLongDescription());
             }
 
-            if(StringUtils.isNotBlank(commitChange.getBreakingChanges())){
+            if (StringUtils.isNotBlank(commitChange.getBreakingChanges())) {
                 breakingChanges.setText(commitChange.getBreakingChanges());
             }
 
-            if(StringUtils.isNotBlank(commitChange.getClosedIssues())){
+            if (StringUtils.isNotBlank(commitChange.getClosedIssues())) {
                 closedIssues.setText(commitChange.getClosedIssues());
             }
         }
@@ -80,7 +99,7 @@ public class CommitPanel {
     }
 
     String getCommitMessage() {
-        return CommitMessage.buildContent(
+        return CommitMessageUtils.buildContent(
                 (ChangeType) changeType.getSelectedItem(),
                 (ChangeScope) changeScope.getSelectedItem(),
                 shortDescription.getText().trim(),
@@ -127,10 +146,6 @@ public class CommitPanel {
         final JLabel label4 = new JLabel();
         label4.setText("Long description");
         mainPanel.add(label4, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(94, 17), null, 0, false));
-        longDescription = new JTextArea();
-        longDescription.setLineWrap(true);
-        longDescription.setToolTipText("Max Size is 72");
-        mainPanel.add(longDescription, new GridConstraints(3, 1, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
         final JLabel label5 = new JLabel();
         label5.setText("Closed issues");
         mainPanel.add(label5, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(94, 17), null, 0, false));
@@ -148,6 +163,12 @@ public class CommitPanel {
         breakingChanges.setText("");
         breakingChanges.setToolTipText("Max Size is 72");
         mainPanel.add(breakingChanges, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        jscrollPane = new JScrollPane();
+        mainPanel.add(jscrollPane, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(-1, 200), null, 0, false));
+        longDescription = new JTextArea();
+        longDescription.setLineWrap(true);
+        longDescription.setToolTipText("");
+        jscrollPane.setViewportView(longDescription);
     }
 
     /**
