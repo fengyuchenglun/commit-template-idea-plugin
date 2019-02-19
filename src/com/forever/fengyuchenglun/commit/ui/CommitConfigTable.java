@@ -22,7 +22,7 @@ import java.util.Map.Entry;
  *
  * @author Sergey Timofiychuk
  */
-public class CommitTable extends JBTable {
+public class CommitConfigTable extends JBTable {
 
     private List<Entry<String, String>> settings;
     private List<String> columnNames;
@@ -33,7 +33,7 @@ public class CommitTable extends JBTable {
      * @param model the model
      */
     @SuppressWarnings("unchecked")
-    public CommitTable(Map<String, String> model, List columnNames) {
+    public CommitConfigTable(Map<String, String> model, List columnNames) {
         this.columnNames = columnNames;
         // 条纹
         setStriped(true);
@@ -93,7 +93,7 @@ public class CommitTable extends JBTable {
             }
         }
         // 打开对话框
-        CommitConfigDialog dialog = new CommitConfigDialog(settings.get(row), columnNames);
+        CommitConfigDialog dialog = new CommitConfigDialog(settings.get(row), columnNames, settings);
         dialog.show();
         if (dialog.isOK()) {
             settings.set(row, dialog.getModel());
@@ -123,7 +123,7 @@ public class CommitTable extends JBTable {
 
         @Override
         public void addRow() {
-            CommitConfigDialog dialog = new CommitConfigDialog(columnNames);
+            CommitConfigDialog dialog = new CommitConfigDialog(columnNames, settings);
             dialog.show();
             if (dialog.isOK()) {
                 settings.add(dialog.getModel());

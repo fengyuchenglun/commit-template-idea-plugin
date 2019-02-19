@@ -1,5 +1,6 @@
 package com.forever.fengyuchenglun.commit.ui;
 
+import com.forever.fengyuchenglun.commit.CommitSetting;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.ui.IdeBorderFactory;
@@ -13,14 +14,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 /**
  * 配置对话框组件
+ * todo 此处应该使用子类在继承
  *
  * @author Sergey Timofiychuk
  */
 public class CommitConfigDialog extends DialogWrapper {
-
+    CommitSetting commitSetting = CommitSetting.getInstance();
     /**
      * The Model.
      */
@@ -39,6 +42,7 @@ public class CommitConfigDialog extends DialogWrapper {
      * The Column names.
      */
     private List<String> columnNames;
+    private List<Entry<String, String>> tableModel;
 
     /**
      * Sets column names.
@@ -58,8 +62,8 @@ public class CommitConfigDialog extends DialogWrapper {
     /**
      * Instantiates a new Template config dialog.
      */
-    public CommitConfigDialog(List<String> columnNames) {
-        this(null, columnNames);
+    public CommitConfigDialog(List<String> columnNames, List<Entry<String, String>> tableModel) {
+        this(null, columnNames, tableModel);
     }
 
     /**
@@ -67,9 +71,10 @@ public class CommitConfigDialog extends DialogWrapper {
      *
      * @param mode the mode
      */
-    public CommitConfigDialog(Entry<String, String> mode, List<String> columnNames) {
+    public CommitConfigDialog(Entry<String, String> mode, List<String> columnNames, List<Entry<String, String>> tableModel) {
         super(true);
         this.setColumnNames(columnNames);
+        this.tableModel = tableModel;
         if (mode != null) {
             Map<String, String> modelCopy = new HashMap<String, String>();
             modelCopy.put(mode.getKey(), mode.getValue());
@@ -83,6 +88,24 @@ public class CommitConfigDialog extends DialogWrapper {
     protected ValidationInfo doValidate() {
         if (nameField.getText().trim().length() == 0) {
             return new ValidationInfo(String.format("%s  is require", columnNames.get(0)));
+        }
+        // bad code
+        if ("Type".equalsIgnoreCase(columnNames.get(0))) {
+            Optional<Entry<String, String>> changeType = tableModel.stream().filter(x -> x.getKey().equalsIgnoreCase(nameField.getText())).findFirst();
+
+            if (!changeType.isPresent() || (changeType.isPresent() && (null != model && model.getKey().equalsIgnoreCase(nameField.getText())))) {
+                return super.doValidate();
+            } else {
+                return new ValidationInfo(String.format("%s  have exist!", nameField.getText()));
+            }
+        }
+        if ("Scope".equalsIgnoreCase(columnNames.get(0))) {
+            Optional<Entry<String, String>> changeScope = tableModel.stream().filter(x -> x.getKey().equalsIgnoreCase(nameField.getText())).findFirst();
+            if (!changeScope.isPresent() || (changeScope.isPresent() && (null != model && model.getKey().equalsIgnoreCase(nameField.getText())))) {
+                return super.doValidate();
+            } else {
+                return new ValidationInfo(String.format("%s  have exist!", nameField.getText()));
+            }
         }
         return super.doValidate();
     }

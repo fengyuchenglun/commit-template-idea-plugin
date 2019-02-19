@@ -24,12 +24,12 @@ import static org.apache.commons.lang.StringUtils.isNotBlank;
 public class CommitMessageUtils {
     //  https://stackoverflow.com/a/2120040/5138 796
     private static final int MAX_LINE_LENGTH = 100;
-    private static Pattern HEADER_PATTERN = Pattern.compile("^([a-z]+)(\\((.*)\\))?: ([^\n]+)+?(.*)?\n", Pattern.DOTALL | Pattern.MULTILINE);
+    private static Pattern HEADER_PATTERN = Pattern.compile("^([a-z]+)(\\((.*)\\))?: ([^\n]+)+?(.*)?\n?", Pattern.DOTALL | Pattern.MULTILINE);
 
     public static String buildContent(ChangeType changeType, ChangeScope changeScope, String shortDescription, String longDescription, String closedIssues, String breakingChanges) {
         StringBuilder builder = new StringBuilder();
         builder.append(changeType.getType());
-        if (null != changeScope && StringUtils.equalsIgnoreCase(changeScope.getScope(), DEFAULT_CHANGE_SCOPE_VALUE)) {
+        if (null != changeScope && !StringUtils.equalsIgnoreCase(changeScope.getScope(), DEFAULT_CHANGE_SCOPE_VALUE)) {
             builder
                     .append('(')
                     .append(changeScope.getScope())
@@ -79,6 +79,13 @@ public class CommitMessageUtils {
         }
         // 分成两部分
         String[] sections = commitMessage.split("\nBREAKING CHANGE:\\s");
+        if (StringUtils.contains(sections[0], "Closes ")) {
+            String s = new String(sections[0]);
+            int index = StringUtils.indexOf(s, "Closes ");
+            sections=new String[2];
+            sections[0] = StringUtils.substring(s, 0, index);
+            sections[1] = StringUtils.substring(s, index);
+        }
         // 解析header与body部分
         Matcher m = HEADER_PATTERN.matcher(sections[0]);
         if (m.find()) {
@@ -133,6 +140,8 @@ public class CommitMessageUtils {
                     closes.add(section1[i].trim());
                 }
                 commitChange.setClosedIssues(StringUtils.join(closes.toArray(), ","));
+            }else {
+                commitChange.setBreakingChanges(sections[1].trim());
             }
 //           // 用Closes再次切分
 //            String[] section1=sections[1].split("Closes");
@@ -140,8 +149,6 @@ public class CommitMessageUtils {
 //                    if(section1[i].contains("Closes"))
 //                }
         }
-
-
         return commitChange;
     }
 

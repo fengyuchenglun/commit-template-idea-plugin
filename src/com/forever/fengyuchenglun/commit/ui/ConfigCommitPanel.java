@@ -3,14 +3,11 @@ package com.forever.fengyuchenglun.commit.ui;
 import com.forever.fengyuchenglun.commit.CommitSetting;
 import com.forever.fengyuchenglun.commit.model.ChangeScope;
 import com.forever.fengyuchenglun.commit.model.ChangeType;
-import com.forever.fengyuchenglun.commit.ui.CommitTable;
-import com.intellij.openapi.options.ConfigurationException;
+import com.google.common.collect.Lists;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.compress.utils.Lists;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +15,6 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -28,8 +24,8 @@ import java.util.stream.Collectors;
 public class ConfigCommitPanel {
     private JPanel mainPanel;
     private CommitSetting commitSetting;
-    private CommitTable changeTypeTable;
-    private CommitTable changeScopeTable;
+    private CommitConfigTable changeTypeTable;
+    private CommitConfigTable changeScopeTable;
 
     private String[] changeTypeColumnNames = {"Type", "Description"};
     private String[] changeScopeColumnNames = {"Scope", "Description"};
@@ -38,13 +34,13 @@ public class ConfigCommitPanel {
         this.commitSetting = commitSetting;
         mainPanel.setLayout(new GridLayoutManager(2, 1, new Insets(10, 10, 10, 10), -1, -1));
 
-        changeTypeTable = new CommitTable(commitSetting.getChangeTypeList().stream().collect(Collectors.toMap(ChangeType::getType, x -> x.getDescription(), (key1, key2) -> key2, LinkedHashMap::new)), Arrays.asList(changeTypeColumnNames));
+        changeTypeTable = new CommitConfigTable(commitSetting.getChangeTypeList().stream().collect(Collectors.toMap(ChangeType::getType, x -> x.getDescription(), (key1, key2) -> key2, LinkedHashMap::new)), Arrays.asList(changeTypeColumnNames));
         JPanel changeTypeLocalPanel = ToolbarDecorator.createDecorator(changeTypeTable).createPanel();
         JPanel changeTypePanel = new JPanel(new BorderLayout());
         changeTypePanel.setBorder(IdeBorderFactory.createTitledBorder("Change of Type", false, new Insets(0, 0, 10, 0)));
         changeTypePanel.add(changeTypeLocalPanel, BorderLayout.CENTER);
 
-        changeScopeTable = new CommitTable(commitSetting.getChangeScopeList().stream().collect(Collectors.toMap(ChangeScope::getScope, x -> x.getDescription(), (key1, key2) -> key2, LinkedHashMap::new)), Arrays.asList(changeScopeColumnNames));
+        changeScopeTable = new CommitConfigTable(commitSetting.getChangeScopeList().stream().collect(Collectors.toMap(ChangeScope::getScope, x -> x.getDescription(), (key1, key2) -> key2, LinkedHashMap::new)), Arrays.asList(changeScopeColumnNames));
         JPanel changeScopeLocalPanel = ToolbarDecorator.createDecorator(changeScopeTable).createPanel();
         JPanel changeScopePanel = new JPanel(new BorderLayout());
         changeScopePanel.setBorder(IdeBorderFactory.createTitledBorder("Change of Scope", false, new Insets(0, 0, 10, 0)));
@@ -107,7 +103,7 @@ public class ConfigCommitPanel {
      */
     public void apply() {
         List<ChangeType> changeTypeList = Lists.newArrayList();
-        for (Map.Entry<String, String> entry : changeScopeTable.getSettings().entrySet()) {
+        for (Map.Entry<String, String> entry : changeTypeTable.getSettings().entrySet()) {
             changeTypeList.add(new ChangeType(entry.getKey(), entry.getValue()));
         }
 
@@ -115,15 +111,14 @@ public class ConfigCommitPanel {
         for (Map.Entry<String, String> entry : changeScopeTable.getSettings().entrySet()) {
             changeScopeList.add(new ChangeScope(entry.getKey(), entry.getValue()));
         }
-        commitSetting.getChangeTypeList().addAll(changeTypeList);
-        commitSetting.getChangeScopeList().addAll(changeScopeList);
+        commitSetting.setChangeScopeList(changeScopeList);
+        commitSetting.setChangeTypeList(changeTypeList);
     }
 
     public void reset() {
         // 重置
-        commitSetting.noStateLoaded();
-        changeTypeTable.setSettingsModel(commitSetting.getChangeTypeList().stream().collect(Collectors.toMap(ChangeType::getType, x -> x.getDescription())));
-        changeScopeTable.setSettingsModel(commitSetting.getChangeScopeList().stream().collect(Collectors.toMap(ChangeScope::getScope, x -> x.getDescription())));
+        changeTypeTable.setSettingsModel(commitSetting.getChangeTypeList().stream().collect(Collectors.toMap(ChangeType::getType, x -> x.getDescription(), (key1, key2) -> key2, LinkedHashMap::new)));
+        changeScopeTable.setSettingsModel(commitSetting.getChangeScopeList().stream().collect(Collectors.toMap(ChangeScope::getScope, x -> x.getDescription(), (key1, key2) -> key2, LinkedHashMap::new)));
 
     }
 

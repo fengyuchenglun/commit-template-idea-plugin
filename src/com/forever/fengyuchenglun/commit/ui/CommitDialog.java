@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 /**
+ * 提交commit对话框
  * @author Damien Arrachequesne
  */
 public class CommitDialog extends DialogWrapper {
